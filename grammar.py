@@ -1,6 +1,6 @@
 class Grammar:
-    def __init__(self, N, T, P, S):
-        self.N = N
-        self.T = T
-        self.P = P
-        self.S = S
+    def __init__(self, n, t, p, s):
+        self.N = n
+        self.T = t
+        self.P = p
+        self.S = s
