@@ -11,9 +11,10 @@ def is_empty(grammar):
                 if not set(a).difference(temp_good_value):
                     good_value.add(key)
 
-    return grammar.S in good_value
+    if grammar.S in good_value:
+        return grammar
 
 
 def demo():
-    g1 = Grammar({"E", "T", "F"}, {"a", "+", "*"}, {"E": ["E+T", "T"], "F": ["E", "a"]}, "E")
+    g1 = Grammar({"E", "T", "J", "F"}, {"a", "+", "*", "d"}, {"E": ["E+T", "TF"], "T": ["T", "F"], "F": ["F", "a"]}, "E")
     print(is_empty(g1))
