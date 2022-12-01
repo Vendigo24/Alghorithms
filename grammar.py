@@ -6,6 +6,9 @@ class Grammar:
         self.P = p
         self.S = s
 
+    def __eq__(self, other):
+        return self.N == other.N and self.T == other.T and self.P == other.P and self.S == other.S
+    
     def __str__(self):
         return "N: " + str(self.N) + "\nT: " + str(self.T) + "\nP: " + str(self.P) + "\nS: " + str(self.S)
 
