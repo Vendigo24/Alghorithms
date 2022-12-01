@@ -33,4 +33,4 @@ class Grammar:
             for key in bad_keys:
                 new_grammar.P.pop(key)
 
-            return new_grammar
+            return self.S in good_value, new_grammar
