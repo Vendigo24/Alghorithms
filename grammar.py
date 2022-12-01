@@ -1,3 +1,4 @@
+from copy import deepcopy
 class Grammar:
     def __init__(self, n, t, p, s):
         self.N = n
@@ -19,7 +20,7 @@ class Grammar:
                         good_value.add(key)
 
         if self.S in good_value:
-            new_grammar = Grammar(self.N, self.T, self.P.copy(), self.S)
+            new_grammar = Grammar(self.N, self.T, deepcopy(self.P), self.S)
             # нетерминалы составлены из нетерминалов множества "good_value"
             new_grammar.N = good_value.intersection(new_grammar.N)
 
@@ -32,5 +33,12 @@ class Grammar:
             # Удаляю ненужные привила
             for key in bad_keys:
                 new_grammar.P.pop(key)
+
+            copy_new_grammar = new_grammar.P.copy()
+
+            for key, value in copy_new_grammar.items():
+                for a in value:
+                    if set(a).intersection(bad_keys):
+                        new_grammar.P[key].remove(a)
 
             return self.S in good_value, new_grammar
