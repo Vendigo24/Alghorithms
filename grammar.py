@@ -19,18 +19,18 @@ class Grammar:
                         good_value.add(key)
 
         if self.S in good_value:
-
+            new_grammar = Grammar(self.N, self.T, self.P.copy(), self.S)
             # нетерминалы составлены из нетерминалов множества "good_value"
-            self.N = good_value.intersection(self.N)
+            new_grammar.N = good_value.intersection(new_grammar.N)
 
             # правила, которые состоят из символов нетерминалов и терминалов
             bad_keys = set()
-            for key, value in self.P.items():
+            for key, value in new_grammar.P.items():
                 if not key in good_value:
-                        bad_keys.add(key)
+                    bad_keys.add(key)
 
             # Удаляю ненужные привила
             for key in bad_keys:
-                self.P.pop(key)
+                new_grammar.P.pop(key)
 
-            return self
+            return self.S in good_value, new_grammar
