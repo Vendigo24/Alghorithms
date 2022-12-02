@@ -3,14 +3,28 @@ from grammar import Grammar
 
 def remove_lambda_rules(old_grammar):
     def find_non_terminals(grammar):
+        def find_lambda_non_terminals(sym, _set):
+            for i_rule in grammar.P[sym]:
+                if i_rule == '' or set(i_rule).issubset(_set):
+                    _set.add(sym)
+                    return
+                for elems in set(i_rule).intersection(grammar.N):
+                    find_lambda_non_terminals(elems, _set)
+
+        def find_terminals(sym, _set):
+            for i_rule in grammar.P[sym]:
+                if set(i_rule).intersection(grammar.T) or (set(i_rule).intersection(_set)):
+                    _set.add(sym)
+                    return
+                for elems in set(i_rule).intersection(grammar.N):
+                    find_terminals(elems, _set)
+
         l_non_terminals = set()
         non_terminals = set()
-        for key, value in grammar.P.items():
-            for rule in value:
-                if not set(rule).difference(l_non_terminals.union('')):
-                    l_non_terminals.add(key)
-                elif set(rule).intersection(non_terminals.union(grammar.T)):
-                    non_terminals.add(key)
+        for el in grammar.N:
+            find_lambda_non_terminals(el, l_non_terminals)
+            find_terminals(el, non_terminals)
+
         return l_non_terminals, non_terminals
 
     def find_rules_with_lambda_non_terminals(grammar, set_of_non_terminals):
@@ -33,15 +47,21 @@ def remove_lambda_rules(old_grammar):
     for lambda_rule in rules_with_lambda_non_terminals:
         for start, end in lambda_rule:
             symbols = set(end)
-            if symbols.issubset(non_terminals_l):
+            if symbols.issubset(non_terminals_l) and not(symbols.intersection(new_non_terminals)):
                 continue
             for elem in symbols.intersection(non_terminals_l.difference(new_non_terminals)):
                 end = end.replace(elem, '')
-            temp = [end.replace(elem, '', count)
-                    for elem in symbols.intersection(new_non_terminals.intersection(non_terminals_l))
-                    for count in range(end.count(elem) + 1)]
+            temp = list()
+            if symbols.intersection(new_non_terminals.intersection(non_terminals_l)):
+                temp = list({end.replace(elem, '', count)
+                             if len(end) != 1 and symbols.intersection(new_non_terminals.intersection(non_terminals_l))
+                             else end
+                            for elem in symbols.intersection(new_non_terminals.intersection(non_terminals_l))
+                            for count in range(end.count(elem) + 1)})
+            else:
+                temp.append(end)
             if len(temp) != 0:
-                if start in rules_with_lambda_non_terminals:
+                if start in rules_without_lambda_non_terminals:
                     rules_without_lambda_non_terminals[start].extend(temp)
                 else:
                     rules_without_lambda_non_terminals[start] = temp
