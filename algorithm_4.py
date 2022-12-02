@@ -5,19 +5,19 @@ def remove_lambda_rules(old_grammar):
     def find_non_terminals(grammar):
         def find_lambda_non_terminals(sym, _set):
             for i_rule in grammar.P[sym]:
+                for elems in set(i_rule).intersection(grammar.N):
+                    find_lambda_non_terminals(elems, _set)
                 if i_rule == '' or set(i_rule).issubset(_set):
                     _set.add(sym)
                     return
-                for elems in set(i_rule).intersection(grammar.N):
-                    find_lambda_non_terminals(elems, _set)
 
         def find_terminals(sym, _set):
             for i_rule in grammar.P[sym]:
+                for elems in set(i_rule).intersection(grammar.N):
+                    find_terminals(elems, _set)
                 if set(i_rule).intersection(grammar.T) or (set(i_rule).intersection(_set)):
                     _set.add(sym)
                     return
-                for elems in set(i_rule).intersection(grammar.N):
-                    find_terminals(elems, _set)
 
         l_non_terminals = set()
         non_terminals = set()
