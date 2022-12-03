@@ -25,7 +25,7 @@ class MyTestCase(unittest.TestCase):
                              {'a', 'b'},
                              {'S': ['A'], 'A': ['AA'], 'B': ['bB']},
                              'S')
-        self.assertEqual(grammar.is_empty(), False)
+        self.assertEqual(grammar.is_empty(), (False, None))
 
 
 if __name__ == '__main__':

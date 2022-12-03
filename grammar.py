@@ -59,4 +59,4 @@ class Grammar:
 
             return self.S in good_value, new_grammar
         else:
-            return False
+            return False, None
