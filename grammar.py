@@ -2,7 +2,7 @@ from copy import deepcopy
 
 
 class Grammar:
-    def __init__(self, n, t, p, s):
+    def __init__(self, n: set, t: set, p: dict[str, list[str]], s: str):
         self.N = n
         self.T = t
         self.P = p

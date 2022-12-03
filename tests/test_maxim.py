@@ -41,7 +41,7 @@ class RemoveLambdaRulesCase(TestCase):
     def test_2(self):
         g = Grammar(
             {"S"},
-            {},
+            set(),
             {
                 "S": [""]
             },
@@ -50,7 +50,7 @@ class RemoveLambdaRulesCase(TestCase):
 
         necessary_grammar = Grammar(
             {"S"},
-            {},
+            set(),
             {
                 "S": [""]
             },
@@ -129,31 +129,6 @@ class RemoveUselessSymbols(TestCase):
         self.assertEqual(new_grammar, None)
 
     def test_3(self):
-        g = Grammar(
-            {"S", "A"},
-            {"a"},
-            {
-                "S": ["A"],
-                "A": ["", "a"]
-            },
-            "S"
-        )
-
-        necessary_grammar = Grammar(
-            {"S", "A"},
-            {"a"},
-            {
-                "S": ["A"],
-                "A": ["", "a"]
-            },
-            "S"
-        )
-
-        new_grammar = algorithm_3.remove_useless_symbols(g)
-
-        self.assertEqual(new_grammar, necessary_grammar)
-
-    def test_4(self):
         g = Grammar(
             {"E", "T", "F"},
             {"a", "+", "d"},
