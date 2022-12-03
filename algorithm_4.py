@@ -21,7 +21,7 @@ def remove_lambda_rules(old_grammar):
 
         l_non_terminals = set()
         non_terminals = set()
-        for el in grammar.N:
+        for el in grammar.P:
             find_lambda_non_terminals(el, l_non_terminals)
             find_terminals(el, non_terminals)
 

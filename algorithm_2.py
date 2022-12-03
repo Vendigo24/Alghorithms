@@ -5,7 +5,7 @@ def remove_unreachable_symbols(grammar):
     def get_all_reachable_symbols(s, vv):
         vt = set()
 
-        if not (s in grammar.P):
+        if s not in grammar.P:
             return vv
 
         for rule in grammar.P[s]:

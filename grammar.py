@@ -32,7 +32,7 @@ class Grammar:
             temp_good_value = good_value.copy()
             for key, value in self.P.items():
                 for a in value:
-                    if not set(a).difference(temp_good_value):
+                    if not set(a).difference(temp_good_value) and a!='':
                         good_value.add(key)
 
         if self.S in good_value:

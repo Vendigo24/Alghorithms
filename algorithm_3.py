@@ -2,5 +2,5 @@ from algorithm_2 import remove_unreachable_symbols
 
 
 def remove_useless_symbols(old_grammar):
-    (is_empty, grammar) = old_grammar.is_empty()
-    return remove_unreachable_symbols(grammar) if is_empty else None
+    not_empty, grammar = old_grammar.is_empty()
+    return remove_unreachable_symbols(grammar) if not_empty else None
