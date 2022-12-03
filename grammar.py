@@ -58,3 +58,5 @@ class Grammar:
                         new_grammar.P[key].remove(a)
 
             return self.S in good_value, new_grammar
+        else:
+            return False
