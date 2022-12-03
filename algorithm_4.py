@@ -65,8 +65,11 @@ def remove_lambda_rules(old_grammar):
                     rules_without_lambda_non_terminals[start].extend(temp)
                 else:
                     rules_without_lambda_non_terminals[start] = temp
+    else:
+        rules_without_lambda_non_terminals[old_grammar.S] = ['']
+        new_non_terminals.add(old_grammar.S)
 
-    new_axiom = 'S\'' if old_grammar.S in non_terminals_l else old_grammar.S
+    new_axiom = 'S\'' if old_grammar.S in non_terminals_l and rules_without_lambda_non_terminals[old_grammar.S] != [''] else old_grammar.S
 
     if new_axiom not in new_non_terminals:
         rules_without_lambda_non_terminals[new_axiom] = ['', old_grammar.S]
