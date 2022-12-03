@@ -2,7 +2,7 @@ import unittest
 import grammar as gr
 
 
-class MyTestCase(unittest.TestCase):
+class EmptyTestCase(unittest.TestCase):
     def test_non_empty_language_created_by_grammar_with_no_change(self):
         grammar = gr.Grammar({'S', 'A', 'B'},
                              {'a', 'b'},
@@ -28,5 +28,3 @@ class MyTestCase(unittest.TestCase):
         self.assertEqual(grammar.is_empty(), (False, None))
 
 
-if __name__ == '__main__':
-    unittest.main()
