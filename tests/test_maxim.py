@@ -1,15 +1,63 @@
 from unittest import TestCase
+from grammar import Grammar
+import algorithm_4
 
 
-class PrintCase(TestCase):
+class RemoveLambdaRulesCase(TestCase):
     def test_1(self):
-        self.assertEqual(True, False)
+        g = Grammar(
+            {"A", "B", "M", "N", "K", "S"},
+            {"a", "b", "c", "p"},
+            {
+                "A": ["c", ""],
+                "B": ["p", ""],
+                "M": ["AB"],
+                "N": ["Ab"],
+                "K": ["ab"],
+                "S": ["KNM"]
+            },
+            "S"
+        )
+
+        necessary_grammar = Grammar(
+            {"A", "B", "M", "N", "K", "S"},
+            {"a", "b", "c", "p"},
+            {
+                "A": ["c"],
+                "B": ["p"],
+                "M": ["AB", "A", "B"],
+                "N": ["Ab", "b"],
+                "K": ["ab"],
+                "S": ["KNM", "KN"]
+            },
+            "S"
+        )
+
+        new_grammar = algorithm_4.remove_lambda_rules(g)
+
+        self.assertEqual(new_grammar, necessary_grammar)
 
     def test_2(self):
-        self.assertEqual(True, True)
+        g = Grammar(
+            {"S"},
+            {},
+            {
+                "S": [""]
+            },
+            "S"
+        )
 
-    def test_3(self):
-        self.assertEqual(False, False)
+        necessary_grammar = Grammar(
+            {"S"},
+            {},
+            {
+                "S": [""]
+            },
+            "S"
+        )
 
-    def test_4(self):
-        self.assertEqual(False, True)
+        new_grammar = algorithm_4.remove_lambda_rules(g)
+
+        self.assertEqual(new_grammar, necessary_grammar)
+
+
