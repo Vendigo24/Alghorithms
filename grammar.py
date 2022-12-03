@@ -1,4 +1,6 @@
 from copy import deepcopy
+
+
 class Grammar:
     def __init__(self, n, t, p, s):
         self.N = n
@@ -7,8 +9,19 @@ class Grammar:
         self.S = s
 
     def __eq__(self, other):
-        return self.N == other.N and self.T == other.T and self.P == other.P and self.S == other.S
-    
+        def compare_rules(rules1, rules2):
+            for key, value in rules1.items():
+                if rules2.get(key) is None:
+                    return False
+                if sorted(rules1[key]) != sorted(rules2[key]):
+                    return False
+            return True
+
+        return self.N == other.N \
+            and self.T == other.T \
+            and compare_rules(self.P, other.P) \
+            and self.S == other.S
+
     def __str__(self):
         return "N: " + str(self.N) + "\nT: " + str(self.T) + "\nP: " + str(self.P) + "\nS: " + str(self.S)
 
