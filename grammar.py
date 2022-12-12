@@ -60,3 +60,43 @@ class Grammar:
             return self.S in good_value, new_grammar
         else:
             return False, None
+
+    def get_all_reachable_symbols(self, start_symbol):
+        """ Get all symbols reachable from start_symbol in that grammar. """
+        all_reachable_symbols = set(start_symbol)
+        reachable_symbols = list(start_symbol)
+
+        i = 0
+        while i < len(reachable_symbols):
+            if reachable_symbols[i] in self.P:
+                symbols_reachable_from_rule = set()
+                for rule in self.P[reachable_symbols[i]]:
+                    symbols_reachable_from_rule = symbols_reachable_from_rule.union(Grammar.get_ntt_from_rule(rule))
+
+                raw_symbols = symbols_reachable_from_rule.difference(all_reachable_symbols)
+                if len(raw_symbols) > 0:
+                    reachable_symbols.extend(raw_symbols)
+                    all_reachable_symbols = all_reachable_symbols.union(raw_symbols)
+            i += 1
+
+        return all_reachable_symbols
+
+    @staticmethod
+    def get_ntt_from_rule(rule):
+        non_terminals_terminals_from_rule = set()
+
+        i = 0
+        rule_len = len(rule)
+        while i < rule_len:
+            if rule[i] == "<":
+                j = i + 1
+                while rule[j] != ">":
+                    j += 1
+                    if j == rule_len:
+                        raise NameError('No ">" character closing the "<" character in rule')
+                non_terminals_terminals_from_rule.add(rule[i+1:j])
+                i = j + 1
+            else:
+                non_terminals_terminals_from_rule.add(rule[i])
+                i += 1
+        return non_terminals_terminals_from_rule
