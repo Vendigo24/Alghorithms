@@ -32,7 +32,7 @@ class Grammar:
             temp_good_value = good_value.copy()
             for key, value in self.P.items():
                 for a in value:
-                    if not set(a).difference(temp_good_value) and a!='':
+                    if not Grammar.get_ntt_from_rule(a).difference(temp_good_value) and a != '':
                         good_value.add(key)
 
         if self.S in good_value:
@@ -43,7 +43,7 @@ class Grammar:
             # правила, которые состоят из символов нетерминалов и терминалов
             bad_keys = set()
             for key, value in new_grammar.P.items():
-                if not key in good_value:
+                if key not in good_value:
                     bad_keys.add(key)
 
             # Удаляю ненужные привила
@@ -54,7 +54,7 @@ class Grammar:
 
             for key, value in copy_new_grammar.items():
                 for a in value:
-                    if set(a).intersection(bad_keys):
+                    if Grammar.get_ntt_from_rule(a).intersection(bad_keys):
                         new_grammar.P[key].remove(a)
 
             return self.S in good_value, new_grammar
@@ -94,7 +94,7 @@ class Grammar:
                     j += 1
                     if j == rule_len:
                         raise NameError('No ">" character closing the "<" character in rule')
-                non_terminals_terminals_from_rule.add(rule[i+1:j])
+                non_terminals_terminals_from_rule.add(rule[i:j + 1])
                 i = j + 1
             else:
                 non_terminals_terminals_from_rule.add(rule[i])
