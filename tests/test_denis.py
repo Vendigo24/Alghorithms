@@ -1,6 +1,6 @@
 from grammar import Grammar
 import unittest
-import algorithm_2
+import remove_unreachable_symbols
 
 
 class RemoveUnreachableSymbols(unittest.TestCase):
@@ -24,7 +24,7 @@ class RemoveUnreachableSymbols(unittest.TestCase):
                                  },
                                  "E")
 
-        self.assertEqual(algorithm_2.remove_unreachable_symbols(tested_grammar), self.needed_grammar)
+        self.assertEqual(remove_unreachable_symbols.algorithm(tested_grammar), self.needed_grammar)
 
     def test_2_unreachable_non_terminals(self):
         g1 = Grammar({"E", "T", "J", "F"},
@@ -37,7 +37,7 @@ class RemoveUnreachableSymbols(unittest.TestCase):
                      },
                      "E")
 
-        self.assertEqual(algorithm_2.remove_unreachable_symbols(g1), self.needed_grammar)
+        self.assertEqual(remove_unreachable_symbols.algorithm(g1), self.needed_grammar)
 
     def test_3_unreachable_terminals(self):
         g2 = Grammar({"E", "T", "F"},
@@ -54,4 +54,4 @@ class RemoveUnreachableSymbols(unittest.TestCase):
                             {"E": ["E"]},
                             "E")
 
-        self.assertEqual(algorithm_2.remove_unreachable_symbols(g2), g_needed2)
+        self.assertEqual(remove_unreachable_symbols.algorithm(g2), g_needed2)

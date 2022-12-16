@@ -1,7 +1,7 @@
 from grammar import Grammar
 
 
-def remove_unreachable_symbols(grammar):
+def algorithm(grammar):
     reachable_symbols = grammar.get_all_reachable_symbols(grammar.S)
     unreachable_symbols = grammar.N.union(grammar.T).difference(reachable_symbols)
 
