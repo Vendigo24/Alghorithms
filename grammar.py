@@ -32,7 +32,7 @@ class Grammar:
             temp_good_value = good_value.copy()
             for key, value in self.P.items():
                 for a in value:
-                    if not Grammar.get_ntt_from_rule(a).difference(temp_good_value) and a != '':
+                    if not Grammar.get_ntt_from_rule(a)[0].difference(temp_good_value) and a != '':
                         good_value.add(key)
 
         if self.S in good_value:
@@ -54,7 +54,7 @@ class Grammar:
 
             for key, value in copy_new_grammar.items():
                 for a in value:
-                    if Grammar.get_ntt_from_rule(a).intersection(bad_keys):
+                    if Grammar.get_ntt_from_rule(a)[0].intersection(bad_keys):
                         new_grammar.P[key].remove(a)
 
             return self.S in good_value, new_grammar
@@ -71,7 +71,7 @@ class Grammar:
             if reachable_symbols[i] in self.P:
                 symbols_reachable_from_rule = set()
                 for rule in self.P[reachable_symbols[i]]:
-                    symbols_reachable_from_rule = symbols_reachable_from_rule.union(Grammar.get_ntt_from_rule(rule))
+                    symbols_reachable_from_rule = symbols_reachable_from_rule.union(Grammar.get_ntt_from_rule(rule)[0])
 
                 raw_symbols = symbols_reachable_from_rule.difference(all_reachable_symbols)
                 if len(raw_symbols) > 0:
@@ -83,7 +83,8 @@ class Grammar:
 
     @staticmethod
     def get_ntt_from_rule(rule):
-        non_terminals_terminals_from_rule = set()
+        """ Return set and list with all non-terminals and terminals from rule, include non-terminals like X' """
+        non_terminals_terminals_from_rule = list()
 
         i = 0
         rule_len = len(rule)
@@ -94,9 +95,14 @@ class Grammar:
                     j += 1
                     if j == rule_len:
                         raise NameError('No ">" character closing the "<" character in rule')
-                non_terminals_terminals_from_rule.add(rule[i:j + 1])
+                non_terminals_terminals_from_rule.append(rule[i:j + 1])
                 i = j + 1
             else:
-                non_terminals_terminals_from_rule.add(rule[i])
+                # Считаем запись вида X' - корректной
+                if i + 1 < rule_len and rule[i + 1] == "'":
+                    non_terminals_terminals_from_rule.append(rule[i] + rule[i + 1])
+                    i += 1
+                else:
+                    non_terminals_terminals_from_rule.append(rule[i])
                 i += 1
-        return non_terminals_terminals_from_rule
+        return set(non_terminals_terminals_from_rule), non_terminals_terminals_from_rule
