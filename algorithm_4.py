@@ -5,17 +5,19 @@ def remove_lambda_rules(old_grammar):
     def find_non_terminals(grammar):
         def find_lambda_non_terminals(sym, _set):
             for i_rule in grammar.P[sym]:
-                for elems in set(i_rule).intersection(grammar.N):
+                set_of_sym, list_of_sym = grammar.get_ntt_from_rule(i_rule)
+                for elems in set_of_sym.intersection(grammar.N):
                     find_lambda_non_terminals(elems, _set)
-                if i_rule == '' or set(i_rule).issubset(_set):
+                if i_rule == '' or set_of_sym.issubset(_set):
                     _set.add(sym)
                     return
 
-        def find_terminals(sym, _set):
+        def find_non_terminals_with_terminals(sym, _set):
             for i_rule in grammar.P[sym]:
-                for elems in set(i_rule).intersection(grammar.N):
-                    find_terminals(elems, _set)
-                if set(i_rule).intersection(grammar.T) or (set(i_rule).intersection(_set)):
+                set_of_sym, list_of_sym = grammar.get_ntt_from_rule(i_rule)
+                for elems in set_of_sym.intersection(grammar.N):
+                    find_non_terminals_with_terminals(elems, _set)
+                if set_of_sym.intersection(grammar.T) or set_of_sym.intersection(_set):
                     _set.add(sym)
                     return
 
@@ -23,19 +25,20 @@ def remove_lambda_rules(old_grammar):
         non_terminals = set()
         for el in grammar.P:
             find_lambda_non_terminals(el, l_non_terminals)
-            find_terminals(el, non_terminals)
+            find_non_terminals_with_terminals(el, non_terminals)
 
         return l_non_terminals, non_terminals
 
     def find_rules_with_lambda_non_terminals(grammar, set_of_non_terminals):
+
         return (zip([i_key], [rule]) for i_key, i_value in grammar.P.items() for rule in i_value
-                if set(rule).intersection(set_of_non_terminals))
+                if grammar.get_ntt_from_rule(rule)[0].intersection(set_of_non_terminals))
 
     def find_rules_without_lambda_non_terminals(grammar, set_of_non_terminals):
         rules = dict()
         for i_key, i_value in grammar.P.items():
             value = [rule for rule in i_value
-                     if not set(rule).intersection(set_of_non_terminals) and set(rule)]
+                     if not grammar.get_ntt_from_rule(rule)[0].intersection(set_of_non_terminals) and set(rule)]
             if len(value) != 0:
                 rules[i_key] = value
         return rules
@@ -46,7 +49,7 @@ def remove_lambda_rules(old_grammar):
 
     for lambda_rule in rules_with_lambda_non_terminals:
         for start, end in lambda_rule:
-            symbols = set(end)
+            symbols = old_grammar.get_ntt_from_rule(end)[0]
             if symbols.issubset(non_terminals_l) and not(symbols.intersection(new_non_terminals)):
                 continue
             for elem in symbols.intersection(non_terminals_l.difference(new_non_terminals)):
