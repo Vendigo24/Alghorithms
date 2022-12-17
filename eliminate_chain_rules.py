@@ -4,11 +4,13 @@ from algorithm_3 import remove_useless_symbols
 
 def algorithm(Gr):
     c_gr = remove_useless_symbols(Gr)
-    c_gr.is_empty()
+    if c_gr is None:
+        return None
     new_rule = dict()
 
     for m_key, m_value in c_gr.P.items():
-        chain_rule = set(m_key)
+        chain_rule = set()
+        chain_rule.add(m_key)
         temp_chain_rule = set()
 
         new_rule[m_key] = list()
@@ -35,6 +37,6 @@ def algorithm(Gr):
                     new_rule[m_key].append(a)
 
     new_grammar = Grammar(c_gr.N, c_gr.T, new_rule, c_gr.S)
-    new_grammar.is_empty()
+
 
     return remove_useless_symbols(new_grammar)
