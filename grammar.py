@@ -82,7 +82,7 @@ class Grammar:
         return all_reachable_symbols
 
     @staticmethod
-    def get_ntt_from_rule(rule):
+    def get_ntt_from_rule(rule: str):
         """ Return set and list with all non-terminals and terminals from rule, include non-terminals like X' """
         non_terminals_terminals_from_rule = list()
 

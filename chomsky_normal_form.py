@@ -12,6 +12,10 @@ def algorithm(g: Grammar):
             p[key].append(rule)
 
     g = algorithm_3.remove_useless_symbols(g)
+
+    if g is None:
+        return None
+
     g = algorithm_4.remove_lambda_rules(g)
 
     new_rules = dict()
