@@ -1,17 +1,11 @@
 from grammar import Grammar
+from grammar_misc import add_rule
 import eliminate_chain_rules
 import algorithm_3
 import algorithm_4
 
 
 def algorithm(g: Grammar):
-    def add_rule(p: dict, key, rule):
-        if key in p and rule not in p[key]:
-            p[key].append(rule)
-        else:
-            p[key] = list()
-            p[key].append(rule)
-
     g = algorithm_3.remove_useless_symbols(g)
     g = eliminate_chain_rules.algorithm(g)
 
