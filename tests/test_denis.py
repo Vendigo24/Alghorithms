@@ -1,7 +1,7 @@
 from grammar import Grammar
 import unittest
 import remove_unreachable_symbols
-
+import chomsky_normal_form
 
 class RemoveUnreachableSymbols(unittest.TestCase):
     def setUp(self):
@@ -55,3 +55,28 @@ class RemoveUnreachableSymbols(unittest.TestCase):
                             "E")
 
         self.assertEqual(remove_unreachable_symbols.algorithm(g2), g_needed2)
+
+class ChomskyNormalForm(unittest.TestCase):
+    def test_1(self):
+        g1 = Grammar({"E", "T", "F"},
+                     {"a", "+", "d"},
+                     {
+                         "E": ["T"],
+                         "T": ["dF", "FF"],
+                         "F": ["d", "aa"]
+                     },
+                     "E")
+        print(chomsky_normal_form.algorithm(g1))
+
+    def test_2(self):
+        g1 = Grammar({"E", "T", "F", "a'", "d'"},
+                     {"a", "d"},
+                     {
+                         "E": ["T"],
+                         "d'": ['d'],
+                         'T': ["d'F", 'FF'],
+                         'F': ['d', "a'a'"],
+                         "a'": ['a']
+                     },
+                     "E")
+        print(chomsky_normal_form.algorithm(g1))
