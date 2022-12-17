@@ -1,4 +1,5 @@
 from grammar import Grammar
+import eliminate_chain_rules
 import algorithm_3
 import algorithm_4
 
@@ -12,6 +13,7 @@ def algorithm(g: Grammar):
             p[key].append(rule)
 
     g = algorithm_3.remove_useless_symbols(g)
+    g = eliminate_chain_rules.algorithm(g)
 
     if g is None:
         return None
