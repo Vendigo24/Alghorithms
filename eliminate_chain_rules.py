@@ -2,10 +2,12 @@ from grammar import Grammar
 from algorithm_3 import remove_useless_symbols
 
 
-def algorithm(Gr):
-    c_gr = remove_useless_symbols(Gr)
+def algorithm(g: Grammar):
+    c_gr = remove_useless_symbols(g)
+
     if c_gr is None:
         return None
+
     new_rule = dict()
 
     for m_key, m_value in c_gr.P.items():
@@ -25,18 +27,17 @@ def algorithm(Gr):
                         cop_key = a
                         chain_rule.add(a)
 
-        chek_key = m_key
-        temp_chek_key = list()
-        while chek_key != temp_chek_key:
-            temp_chek_key = chek_key
+        check_key = m_key
+        temp_check_key = list()
+        while check_key != temp_check_key:
+            temp_check_key = check_key
 
-            for a in c_gr.P[chek_key]:
+            for a in c_gr.P[check_key]:
                 if a in chain_rule:
-                    chek_key = a
+                    check_key = a
                 else:
                     new_rule[m_key].append(a)
 
     new_grammar = Grammar(c_gr.N, c_gr.T, new_rule, c_gr.S)
-
 
     return remove_useless_symbols(new_grammar)

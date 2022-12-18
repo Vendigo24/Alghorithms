@@ -5,7 +5,7 @@ import algorithm_3
 import algorithm_4
 
 
-def algorithm(g: Grammar):
+def algorithm(g: Grammar) -> Grammar | None:
     g = algorithm_3.remove_useless_symbols(g)
     g = eliminate_chain_rules.algorithm(g)
 

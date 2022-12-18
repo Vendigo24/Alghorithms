@@ -61,7 +61,7 @@ class Grammar:
         else:
             return False, None
 
-    def get_all_reachable_symbols(self, start_symbol):
+    def get_all_reachable_symbols(self, start_symbol: str) -> set:
         """ Get all symbols reachable from start_symbol in that grammar. """
         all_reachable_symbols = set(start_symbol)
         reachable_symbols = list(start_symbol)
@@ -82,7 +82,7 @@ class Grammar:
         return all_reachable_symbols
 
     @staticmethod
-    def get_ntt_from_rule(rule: str):
+    def get_ntt_from_rule(rule: str) -> (set, list):
         """ Return set and list with all non-terminals and terminals from rule, include non-terminals like X' """
         non_terminals_terminals_from_rule = list()
 

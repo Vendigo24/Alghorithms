@@ -1,4 +1,4 @@
-def add_rule(p: dict, key, rule):
+def add_rule(p: dict, key: str, rule: str):
     if key in p and rule not in p[key]:
         p[key].append(rule)
     else:

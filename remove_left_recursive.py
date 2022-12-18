@@ -6,7 +6,7 @@ import algorithm_3
 import algorithm_4
 
 
-def algorithm(g: Grammar):
+def algorithm(g: Grammar) -> Grammar | None:
     # TODO Дождаться других алгоритмов и поправить с 17 по 23 строки
     g = algorithm_3.remove_useless_symbols(g)
 
@@ -68,5 +68,4 @@ def algorithm(g: Grammar):
                         add_rule(new_rules, nt[i], new_rule)
                 else:
                     add_rule(new_rules, nt[i], rule)
-        print("")
     return Grammar(g.N.union(new_rules.keys()), g.T, new_rules, g.S)

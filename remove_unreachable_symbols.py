@@ -1,13 +1,13 @@
 from grammar import Grammar
 
 
-def algorithm(grammar):
-    reachable_symbols = grammar.get_all_reachable_symbols(grammar.S)
-    unreachable_symbols = grammar.N.union(grammar.T).difference(reachable_symbols)
+def algorithm(g: Grammar) -> Grammar:
+    reachable_symbols = g.get_all_reachable_symbols(g.S)
+    unreachable_symbols = g.N.union(g.T).difference(reachable_symbols)
 
     p = dict()
-    for key in grammar.P:
+    for key in g.P:
         if key not in unreachable_symbols:
-            p[key] = grammar.P[key]
+            p[key] = g.P[key]
 
-    return Grammar(reachable_symbols.intersection(grammar.N), reachable_symbols.intersection(grammar.T), p, grammar.S)
+    return Grammar(reachable_symbols.intersection(g.N), reachable_symbols.intersection(g.T), p, g.S)
