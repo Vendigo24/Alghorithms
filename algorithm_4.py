@@ -3,34 +3,45 @@ from grammar import Grammar
 
 def remove_lambda_rules(old_grammar):
     def find_non_terminals(grammar):
-        def find_lambda_non_terminals(sym, _set):
-            for i_rule in grammar.P[sym]:
-                set_of_sym, list_of_sym = grammar.get_ntt_from_rule(i_rule)
-                for elems in set_of_sym.intersection(grammar.N):
-                    find_lambda_non_terminals(elems, _set)
-                if i_rule == '' or set_of_sym.issubset(_set):
+
+        def find_lambda_non_terminals(sym, _set, path):
+            for rule in grammar.P[sym]:
+                set_of_sym = grammar.get_ntt_from_rule(rule)[0]
+                if not set_of_sym or set_of_sym.issubset(_set):
                     _set.add(sym)
+                    return
+                set_of_n_in_rule = set_of_sym.intersection(grammar.N)
+                for symbol in set_of_n_in_rule.difference(path[sym]):
+                    path[sym].add(symbol)
+                    find_lambda_non_terminals(symbol, _set, path)
+                else:
                     return
 
-        def find_non_terminals_with_terminals(sym, _set):
-            for i_rule in grammar.P[sym]:
-                set_of_sym, list_of_sym = grammar.get_ntt_from_rule(i_rule)
-                for elems in set_of_sym.intersection(grammar.N):
-                    find_non_terminals_with_terminals(elems, _set)
-                if set_of_sym.intersection(grammar.T) or set_of_sym.intersection(_set):
+        def find_non_terminals_with_terminals(sym, _set, path):
+            for rule in grammar.P[sym]:
+                set_of_sym = grammar.get_ntt_from_rule(rule)[0]
+                if set_of_sym.intersection(grammar.T.union(_set)):
                     _set.add(sym)
                     return
+                set_of_n_in_rule = set_of_sym.intersection(grammar.N)
+                for symbol in set_of_n_in_rule.difference(path[sym]):
+                    path[sym].add(symbol)
+                    find_lambda_non_terminals(symbol, _set, path)
+                else:
+                    if set_of_sym:
+                        _set.add(sym)
+                        return
 
         l_non_terminals = set()
         non_terminals = set()
+        rules_path = {key: set() for key in grammar.P.keys()}
         for el in grammar.P:
-            find_lambda_non_terminals(el, l_non_terminals)
-            find_non_terminals_with_terminals(el, non_terminals)
+            find_lambda_non_terminals(el, l_non_terminals, rules_path)
+            find_non_terminals_with_terminals(el, non_terminals, rules_path)
 
         return l_non_terminals, non_terminals
 
     def find_rules_with_lambda_non_terminals(grammar, set_of_non_terminals):
-
         return (zip([i_key], [rule]) for i_key, i_value in grammar.P.items() for rule in i_value
                 if grammar.get_ntt_from_rule(rule)[0].intersection(set_of_non_terminals))
 
@@ -80,4 +91,7 @@ def remove_lambda_rules(old_grammar):
         rules_without_lambda_non_terminals[new_axiom] = ['', old_grammar.S]
         new_non_terminals.add(new_axiom)
 
-    return Grammar(new_non_terminals, old_grammar.T, rules_without_lambda_non_terminals, new_axiom)
+    return Grammar(new_non_terminals.union(non_terminals_l),
+                   old_grammar.T,
+                   rules_without_lambda_non_terminals,
+                   new_axiom)
