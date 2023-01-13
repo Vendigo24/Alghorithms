@@ -15,7 +15,7 @@ def remove_lambda_rules(old_grammar):
                     path[sym].add(symbol)
                     find_lambda_non_terminals(symbol, _set, path)
                 else:
-                    return
+                    continue
 
         def find_non_terminals_with_terminals(sym, _set, path):
             for rule in grammar.P[sym]:
