@@ -7,14 +7,13 @@ import algorithm_4
 
 
 def algorithm(g: Grammar) -> Grammar | None:
-    # TODO Дождаться других алгоритмов и поправить с 17 по 23 строки
     g = algorithm_3.remove_useless_symbols(g)
 
     if g is None:
         return None
 
     g = eliminate_chain_rules.algorithm(g)
-    # g = algorithm_4.remove_lambda_rules(g)
+    g = algorithm_4.remove_lambda_rules(g)
 
     nt = list(g.P.keys())
     i = 0
